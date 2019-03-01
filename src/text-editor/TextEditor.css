@@ -1,0 +1,15 @@
+.syn__text {
+  margin: 0 20px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  display: inline-block;
+  user-select: none;
+}
+.syn__text:hover {
+  transition: 0.25s ease;
+  transform: scale(0.95);
+}
+.syn__text:active {
+  transition: 0.25s ease;
+  transform: scale(0.9);
+}

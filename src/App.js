@@ -1,28 +1,41 @@
-import React, {Component} from 'react';
-import './App.css';
-import ControlPanel from "./control-panel/ControlPanel";
-import FileZone from "./file-zone/FileZone";
-import getMockText from './text.service';
+import React, { Component } from "react";
+import "./App.css";
+import getMockText from "./text.service";
+import TextEditor from "./text-editor/TextEditor";
 
 class App extends Component {
-    getText() {
-        getMockText().then(function (result) {
-            console.log(result);
-        });
-    }
-    render() {
-        return (
-            <div className="App">
-                <header>
-                    <span>Simple Text Editor</span>
-                </header>
-                <main>
-                    <ControlPanel/>
-                    <FileZone/>
-                </main>
-            </div>
-        );
-    }
+  state = {
+    defaultHtml: ""
+  };
+
+  componentDidMount() {
+    this.getText();
+  }
+
+  getText() {
+    getMockText().then(defaultHtml => {
+      this.setState({ defaultHtml });
+    });
+  }
+
+  render() {
+    const { defaultHtml } = this.state;
+    const actions = {
+      bold: false,
+      italic: false,
+      underline: false
+    };
+    return (
+      <div className="App">
+        <header>
+          <span>Simple Text Editor</span>
+        </header>
+        <main>
+          <TextEditor actions={actions} defaultHtml={defaultHtml} />
+        </main>
+      </div>
+    );
+  }
 }
 
 export default App;

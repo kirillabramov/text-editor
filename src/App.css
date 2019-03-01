@@ -5,10 +5,12 @@ header {
   padding-top: 15px;
   font-size: 24px;
   border-bottom: 4px solid #ffa500;
-  background-color: rgba(33,33,33,0.5);
+  background-color: rgba(33, 33, 33, 0.5);
   color: #fff;
 }
-
+body {
+  user-select: none;
+}
 .App {
   display: flex;
   height: 100%;

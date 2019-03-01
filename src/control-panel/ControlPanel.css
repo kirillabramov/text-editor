@@ -1,12 +1,31 @@
 #control-panel {
-    background-color: #fff;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding-top: 5px;
+  background-color: #fff;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5px;
 }
 #format-actions {
-    width: 200px;
-    margin-right: 400px;
+  width: 200px;
+  margin-right: 400px;
+}
+.format-action {
+  cursor: pointer;
+  outline: none;
+}
+.bold {
+  font-weight: bold;
+}
+.underline {
+  text-decoration: underline;
+}
+.italic {
+  font-style: italic;
+}
+
+.active {
+  background-color: #ffa500;
+  color: #fff;
+  border: 2px solid #fff;
 }

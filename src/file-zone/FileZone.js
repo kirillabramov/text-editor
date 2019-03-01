@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
-import './FileZone.css';
+import React from "react";
+import "./FileZone.css";
 
-class FileZone extends Component {
-    render() {
-        return (
-            <div id="file-zone">
-                <div id="file">
-
-                </div>
-            </div>
-        );
-    }
-}
+const FileZone = ({ handleTextSelection, defaultHtml }) => {
+  return (
+    <div id="file-zone">
+      <div
+        id="file"
+        contentEditable
+        onSelect={handleTextSelection}
+        suppressContentEditableWarning
+      >
+        {defaultHtml}
+      </div>
+    </div>
+  );
+};
 
 export default FileZone;
