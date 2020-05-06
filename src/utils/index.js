@@ -7,10 +7,8 @@ const fetchWords = word => {
   return axios(url, res => {
     return res.json();
   })
-    .then(res => {
-      return res.data.filter(item => item.tags.includes("syn"));
-    })
-    .catch(err => alert("there is no synonyms for that word found :("));
+    .then(res => res.data.filter(item => item.tags.includes("syn")))
+    .catch(err => console.warn(err));
 };
 
 export { fetchWords };

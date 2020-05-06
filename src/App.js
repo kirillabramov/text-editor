@@ -5,7 +5,7 @@ import TextEditor from "./text-editor/TextEditor";
 
 class App extends Component {
   state = {
-    defaultHtml: ""
+    defaultHtml: "",
   };
 
   componentDidMount() {
@@ -13,25 +13,20 @@ class App extends Component {
   }
 
   getText() {
-    getMockText().then(defaultHtml => {
+    getMockText().then((defaultHtml) => {
       this.setState({ defaultHtml });
     });
   }
 
   render() {
     const { defaultHtml } = this.state;
-    const actions = {
-      bold: false,
-      italic: false,
-      underline: false
-    };
     return (
       <div className="App">
         <header>
           <span>Simple Text Editor</span>
         </header>
         <main>
-          <TextEditor actions={actions} defaultHtml={defaultHtml} />
+          <TextEditor defaultHtml={defaultHtml} />
         </main>
       </div>
     );

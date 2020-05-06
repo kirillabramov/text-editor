@@ -2,50 +2,69 @@ import React, { Component } from "react";
 import ControlPanel from "../control-panel/ControlPanel";
 import FileZone from "../file-zone/FileZone";
 import { fetchWords } from "../utils";
-import "./TextEditor.css";
+import SynList from "./SynList";
 
 export default class TextEditor extends Component {
-  state = { actions: this.props.actions, data: null };
+  state = {
+    actions: {
+      bold: false,
+      italic: false,
+      underline: false,
+    },
+    data: [],
+  };
 
-  handleModificator = action => {
-    const actions = { ...this.state.actions };
-    actions[action] = !actions[action];
-    this.setState({ actions });
+  handleModificator = (action) => {
+    const copiedActions = { ...this.state.actions };
+    copiedActions[action] = !copiedActions[action];
+
+    this.setState({ actions: copiedActions });
     document.execCommand(action, false, null);
   };
 
   handleTextSelection = () => {
-    const actions = { ...this.state.actions };
-    Object.keys(actions).forEach(action => {
-      actions[action] = document.queryCommandState(action);
+    const copiedActions = { ...this.state.actions };
+    const actionsKeys = Object.keys(copiedActions);
+
+    actionsKeys.forEach((action) => {
+      copiedActions[action] = document.queryCommandState(action);
     });
-    this.setState({
-      actions
-    });
+
+    this.setState({ actions: copiedActions });
   };
 
-  replaceSelectedText = replacementText => {
+  insertText = ({ range, selection, trimmedReplacementText }) => {
+    if (selection.rangeCount) {
+      range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(trimmedReplacementText));
+    }
+  };
+
+  replaceSelectedText = (replacementText) => {
     let selection, range;
+    const trimmedReplacementText = replacementText.trim();
+
     if (window.getSelection) {
       selection = window.getSelection();
-      if (selection.rangeCount) {
-        range = selection.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(document.createTextNode(replacementText));
-      }
-    } else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange();
-      range.text = replacementText;
+      this.insertText({ selection, trimmedReplacementText, range });
     }
   };
 
   handleSyn = () => {
     if (window.getSelection) {
-      fetchWords(window.getSelection().toString()).then(data => {
+      const selectionText = window.getSelection().toString();
+
+      fetchWords(selectionText).then((data) => {
         this.setState({ data });
       });
     }
   };
+
+  onSynItemClick = ({ currentTarget: { textContent } }) => {
+    this.replaceSelectedText(textContent);
+  };
+
   render() {
     const { defaultHtml } = this.props;
     const { actions, data } = this.state;
@@ -58,25 +77,7 @@ export default class TextEditor extends Component {
             actions={actions}
           />
           <div className="syn">
-            {!data ? (
-              <div>Selected text and click upper button to get synonyms...</div>
-            ) : data.length < 1 ? (
-              <div>Hm... There is no synonyms for that kind of a word..</div>
-            ) : (
-              data.map(({ word }) => (
-                <span
-                  key={word}
-                  className="syn__text"
-                  onClick={e => {
-                    this.replaceSelectedText(
-                      e.currentTarget.textContent.trim()
-                    );
-                  }}
-                >
-                  {word}
-                </span>
-              ))
-            )}
+            <SynList data={data} onClick={this.onSynItemClick} />
           </div>
         </div>
 
